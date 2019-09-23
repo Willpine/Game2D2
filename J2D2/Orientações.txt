@@ -1,8 +1,0 @@
-Criar uma forma primitiva
-Nas propriedades, tirem sua linha de borda
-Transformá-lo em movie clip e clicar duas vezes nele
-Nele, criar outro frame, nesse outro frame, criar outro objeto
-Duplicar ambos os frames, e mudar os objetos
-
-Selecionar uma layer e escrever 
-stop();
