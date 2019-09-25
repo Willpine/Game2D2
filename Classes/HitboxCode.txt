@@ -1,0 +1,17 @@
+//FRAME 1 
+Mouse.hide();
+ 
+ //mc_bolinha é a bolinha
+ //mc_alvo é o objeto sendo atingido
+ //still_alvo é o objeto em seu estado normal
+
+stage.addEventListener(Event.ENTER_FRAME,atualizar)
+
+function atualizar(Event){
+	mc_bolinha.x = mouseX;
+	mc_bolinha.y= mouseY;
+	if(mc_alvo.hitTestObject(mc_bolinha)){
+		mc_alvo.play();
+		}
+	else{mc_alvo.gotoAndPlay(1);}
+}
