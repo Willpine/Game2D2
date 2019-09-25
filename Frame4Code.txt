@@ -1,0 +1,160 @@
+import flash.events.Event;
+
+var pulo:Boolean = true;
+
+var velX:Number = 25;
+var velY:Number = 0;
+
+
+var gravidade:Number = 9; 
+var forcaPulo:Number = -75;
+
+//OBSTACULO - INIMIGO
+var contador:Number = 0;
+var gerador:Number = 50;
+var velocidade_obstaculos:Number = 30;
+
+//CONTAGEM DAS CAIXAS DE TEXTO
+var pontos:Number = 0;
+var vidas:Number = 1;
+var recorde:Number = 0;
+
+//CAIXAS DE TEXTO
+cxVidas.text = ""+vidas;
+cxRecorde.text = ""+recorde;
+
+//FUNCTIONS                                  
+//movimento do cenario
+
+function loopCenario (e:Event){
+	
+	chao.x -=  10;
+		
+	if (chao.x <= -841){
+		
+		chao.x = 0;
+		
+		}
+		
+	bg2.x -= 7;
+		
+	if (bg2.x <= -841){
+		
+		bg2.x = 0;
+		
+		}
+		
+		nvg.x -= 4;
+		
+	if (nvg.x <= -1682){
+		
+		nvg.x = 0;
+		
+		}
+		
+		nvp.x -= 3;
+		
+	if (nvp.x <= -1682){
+		
+		nvp.x = 0;
+		
+		}
+} 
+addEventListener(Event.ENTER_FRAME,loopCenario);
+
+function executar(e:Event){//
+	if(protag.y >= 526){
+		velY = 0;
+		protag.y = 526;
+		pulo = false;
+	}
+	if (pulo == true){//Gravidade
+		protag.y += (velY += gravidade);
+	}
+	//CRIAÇÃO DE OBSTACULOS E PONTOS
+	contador++;
+	cxtexto.text = " " + contador;
+	if(contador>=gerador){
+		gerador += 50;
+		addChild(obstaculo);
+		obstaculo.x=800
+	}
+	
+	obstaculo.x -= velocidade_obstaculos;
+	if(obstaculo.x <= -50){
+		pontos += 10;
+		obstaculo.x = 9999;
+		velocidade_obstaculos = velocidade_obstaculos + 5;
+	}
+	
+	cxPontos.text = " " + pontos;
+	if (protag.hitTestObject(obstaculo)){
+		obstaculo.x=9999;
+		vidas -= 1;
+		cxVidas.text = "" + vidas;
+		velocidade_obstaculos = 30;
+	}
+	
+	//Fim de jogo
+	if (vidas < 0){
+		if (pontos > recorde){
+			recorde = pontos; cxRecorde.text = "     " + recorde;
+		}
+	vidas = 5;
+	cxVidas.text = "     " + vidas;
+	pontos = 0;
+	cxPontos.text = "     " + pontos;
+	gameOver = true;
+	telaFinal();
+	}
+}//Fim da programação de EXECUTAR
+
+addEventListener(Event.ENTER_FRAME,executar);
+
+var gameOver: Boolean = false;
+var telaFim: Teste = new Teste();
+
+function telaFinal(){
+	addChild (telaFim);
+	telaFim.x = 420;
+	telaFim.y = 261;
+	removeEventListener (Event.ENTER_FRAME, executar);
+	stage.removeEventListener (Event.ENTER_FRAME, movimentoPlayer);
+	telaFim.btnCon.addEventListener(MouseEvent.CLICK, clickjogoNovo);
+	telaFim.btnSai.addEventListener(MouseEvent.CLICK, clickDesistir);
+}
+
+function clickjogoNovo(e:MouseEvent){
+	removeChild(telaFim);
+	gameOver = false;
+	pontos = 0;
+	addEventListener(Event.ENTER_FRAME,executar);
+	stage.addEventListener(KeyboardEvent.KEY_DOWN,movimentoPlayer);
+}
+
+function clickDesistir(e:MouseEvent){
+	gotoAndStop(1);
+	removeChild(telaFim);
+	gameOver = false;
+	pontos = 0;
+	contador = 0;
+	addEventListener(Event.ENTER_FRAME,executar);
+	stage.addEventListener(KeyboardEvent.KEY_DOWN,movimentoPlayer);
+}
+
+function movimentoPlayer(e:KeyboardEvent){
+	if(e.keyCode == 39){
+		protag.x += velX;
+	}
+	if(e.keyCode == 37){
+		protag.x -= velX;
+	}
+	if(e.keyCode == 38){
+		if(pulo == false){
+			protag.y -= 20;
+			velY = forcaPulo;
+			pulo = true;
+		}
+	}
+}
+stage.addEventListener(KeyboardEvent.KEY_DOWN,movimentoPlayer);
