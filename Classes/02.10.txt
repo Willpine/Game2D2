@@ -1,0 +1,53 @@
+//OBSTACULO - INIMIGO
+var contador: Number = 0;
+var gerador: Number = 50;
+var velocidade_obstaculos: Number = 30;
+
+//CONTAGEM DAS CAIXAS DE TEXTO
+var pontos: Number = 0;
+var vidas: Number = 0;
+var recorde: Number = 0;
+
+var velocidade_x: Number = 25;
+
+
+function executar(e: Event) {
+
+//CRIACAO DE OBSTACULOS E PONTOS
+	contador++;
+	cxtexto.text = "        " + contador;
+	if (contador >= gerador) {
+		gerador = gerador + 50;
+		addChild(obstaculo);
+		obstaculo.y = 62
+	}
+
+	obstaculo.y += velocidade_obstaculos;
+	if (obstaculo.y <= 50) {
+		pontos = pontos + 10;
+		obstaculo.y = 9999;
+		velocidade_obstaculos = velocidade_obstaculos + 5;
+	}
+
+	cxPontos.text = "        " + pontos;
+	if (Nave.hitTestObject(obstaculo)) {
+		obstaculo.y = 9999;
+		vidas -= 1;
+		cxVidas.text = "        " + vidas;
+		velocidade_obstaculos = 30;
+	}
+
+	// -- FIM DE JOGO -- //
+	if (vidas < 0) {
+		if (pontos > recorde) {
+			recorde = pontos;
+			cxRecorde.text = "        " + recorde;
+		} //atualiza recorde
+		vidas = 5;
+		cxVidas.text = "        " + vidas;
+		pontos = 0;
+		cxPontos.text = "        " + pontos;
+	}
+} //FIM DA FUNCTION EXECUTAR
+
+addEventListener(Event.ENTER_FRAME, executar);
